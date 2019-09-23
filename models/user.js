@@ -36,10 +36,18 @@ const UserSchema = new Schema({
       type : String ,
       trim : true,
       required : true ,
-      enum: ['customer', 'admin', 'superAdmin','repairman']
+      enum: ['customer', 'admin', 'superAdmin','captain','responsibleForPurchase','warehouseKeeper', 'responsibleCaptain']
 
     },
-    block : Boolean ,
+    block : {
+       type: Boolean ,
+       default : false 
+    },
+    city : {
+        type: String ,
+        trim : true
+    },
+
     email: {
         type: String,
         unique: true,
@@ -58,7 +66,6 @@ const UserSchema = new Schema({
     systemId: {
         type: String ,
         trim: true ,
-        required: true ,
         unique : true
 
     }

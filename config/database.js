@@ -1,4 +1,4 @@
 module.exports = {
-    'secret':'nodeauthsecret',
+    'secret':'mojtabadelju814',
     'database': 'mongodb://localhost/serverCApitan'
   };

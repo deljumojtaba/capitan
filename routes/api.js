@@ -6,10 +6,24 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var router = express.Router();
 var User = require("../models/user");
+const smsServise = require('../tools/sendMsg')
+
+
+/////// send Messeage
+
+router.post('/registermobile', (req , res) => {
+  smsServise.registerMobile(req, res)
+
+});
 
 
 
-//// register
+router.post('/acceptmobile' , (req , res) => {
+  smsServise.acceptMobile(req, res)
+})
+
+
+//// register user
 
 router.post('/register', function(req, res) {
     if (!req.body.mobile || !req.body.password) {
@@ -20,7 +34,10 @@ router.post('/register', function(req, res) {
         password: req.body.password,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        role: 'customer'
+        role: 'customer',
+        city: req.body.city,
+        birthDay:req.body.birthDay,
+        email:req.body.email
       });
       // save the user
       newUser.save(function(err) {
