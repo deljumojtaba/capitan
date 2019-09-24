@@ -49,7 +49,7 @@ async acceptMobile(req , res) {
    const mobile = req.body.mobile
    const chekerMobile = await Mobile.findOne({number : mobile , registerCode : userCode})
    if (!chekerMobile) {
-    res.json({success: false, msg: 'کد وارد شده صحیح نمیباشد '});
+    res.json({success: false, msg: 'اظلاعات وارد شده صحیح نمیباشد '});
    }
    else {
      

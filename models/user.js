@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var bcrypt = require('bcrypt-nodejs');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt-nodejs');
+const validator = require('validator')
 
 const UserSchema = new Schema({
     firstName : {
@@ -51,6 +52,7 @@ const UserSchema = new Schema({
     email: {
         type: String,
         unique: true,
+        sparse:true,
         trim: true,
         lowercase: true,
         validate(value) {
@@ -63,10 +65,10 @@ const UserSchema = new Schema({
         type: String ,
         trim: true
     },
-    systemId: {
+    referenceCode: {
         type: String ,
-        trim: true ,
-        unique : true
+        trim: true 
+        
 
     }
 

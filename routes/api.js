@@ -37,7 +37,8 @@ router.post('/register', function(req, res) {
         role: 'customer',
         city: req.body.city,
         birthDay:req.body.birthDay,
-        email:req.body.email
+        email:req.body.email,
+        referenceCode: req.body.referenceCode
       });
       // save the user
       newUser.save(function(err) {
@@ -63,11 +64,20 @@ router.post('/register', function(req, res) {
         // check if password matches
         user.comparePassword(req.body.password, function (err, isMatch) {
           if (isMatch && !err) {
-            // if user is found and password is right create a token
-            const token = jwt.sign({data: user}, config.secret, {
-                expiresIn: 604800 }) // 1 week
-            // return the information including token as JSON
-            res.json({success: true, user ,token: 'JWT ' + token});
+            // // if user is found and password is right create a token
+            // const token = jwt.sign(user.toJSON(), config.secret, {
+            //     expiresIn: 604800 }) // 1 week
+            // // return the information including token as JSON
+            // res.json({success: true, user ,token: 'jwt ' + token});
+            const token = jwt.sign(user.toJSON(), config.secret, {
+              expiresIn: 604800 // 1 week
+            })
+            res.json({
+              success: true,
+              token: `jwt ${token}`,
+              user: user.toJSON()
+            })
+          
           } else {
             res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
           }
@@ -77,6 +87,45 @@ router.post('/register', function(req, res) {
   });
 
 
+/////////////////////////////////////
+//// add super admin
+////////////////////////////////////
+router.post ('/addsuperadmin' , async (req , res) => {
+  try {
+  const superAdmin = await User.findOne({role :'superAdmin'})
+  if (superAdmin) {
+  return res.status(401).send({success: false, msg: 'Super admin available'});  
+  } 
+    
+    const newSuperAdmin = new User({
+      mobile: req.body.mobile,
+      password: req.body.password,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      role: 'superAdmin',
+      city: req.body.city,
+      birthDay:req.body.birthDay,
+      email:req.body.email,
+  
+    });
+    // save the user
+    newSuperAdmin.save( (err)=> {
+      if (err) {
+        return res.json({success: false, msg: err});
+      }
+      res.json({success: true,newSuperAdmin, msg: 'Successful created new super Admin.'});
+
+    })
+     
+
+  } catch (error) {
+    res.status(400).send({
+      error: `An error has occured ${error}`
+    })
+  }
+
+  
+})
 
 
 
