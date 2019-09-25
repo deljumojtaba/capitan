@@ -13,7 +13,6 @@ const adminController = require('../tools/adminController')
 
 router.post('/addcustomer',passport.authenticate('jwt', { session: false }), (req , res) => {
        const reqUser = req.user
-       console.log(reqUser)
     if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
         return res.status(403).send({
             error: `access denied`
@@ -23,6 +22,73 @@ router.post('/addcustomer',passport.authenticate('jwt', { session: false }), (re
     }
   
   });
+
+
+  ///////////////////////////////////
+  //get all customer
+  ///////////////////////////////////
+  router.get('/allcustomer',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+ if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+     return res.status(403).send({
+         error: `access denied`
+       })
+ } else  {
+     adminController.allCustomer(req, res)
+ }
+
+});
+
+/////////////////////////////////////////
+//// add manufactuier
+////////////////////////////////////////
+
+router.post('/addmanufactuier',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+   return res.status(403).send({
+       error: `access denied`
+     })
+} else  {
+   adminController.addManufactuier(req, res)
+}
+
+});
+
+////////////////////////////////////////////
+///// delete manufactuier
+///////////////////////////////////////////
+
+router.delete('/deletemanufactuier',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+   return res.status(403).send({
+       error: `access denied`
+     })
+} else  {
+   adminController.deleteManufactuier(req, res)
+}
+
+});
+
+/////////////////////////////////////////////
+////// edit mannufactuier
+////////////////////////////////////////////
+
+router.put('/editmanufactuier',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+   return res.status(403).send({
+       error: `access denied`
+     })
+} else  {
+   adminController.editManufactuier(req, res)
+}
+
+});
+
+
+
   
 
 

@@ -15,6 +15,7 @@ const adminRouter = require('./routes/admin');
 const superAdminRouter = require('./routes/superAdmin');
 const bodyParser = require('body-parser')
 require('./config/passport')(passport)
+const customerRouter = require ('./routes/customer')
 
 
 
@@ -39,6 +40,8 @@ app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 app.use('/admin', adminRouter);
 app.use('/superadmin', superAdminRouter);
+app.use('/customer', customerRouter);
+
 
 
 
