@@ -87,10 +87,101 @@ if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
 
 });
 
+/////////////////////////////////////
+///////add car brand/
+////////////////////////////////////
 
+router.post('/addbrandcar',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+   return res.status(403).send({
+       error: `access denied`
+     })
+} else  {
+   adminController.addCarBrand(req, res)
+}
 
-  
+});
 
+///////////////////////////////////
+//////edit car brand
+//////////////////////////////////
+
+router.put('/editbrandcar',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+   return res.status(403).send({
+       error: `access denied`
+     })
+} else  {
+   adminController.editCarBrand(req, res)
+}
+
+});
+
+///////////////////////////////////
+// delete Car Brand
+//////////////////////////////////
+
+router.delete('/deletebrandcar',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+   return res.status(403).send({
+       error: `access denied`
+     })
+} else  {
+   adminController.deleteCarBrand(req, res)
+}
+
+});
+
+////////////////////////////////////////
+//////add Car Name 
+////////////////////////////////////////
+
+router.post('/addcarname',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+   return res.status(403).send({
+       error: `access denied`
+     })
+} else  {
+   adminController.addCarName(req, res)
+}
+
+});
+
+///////////////////////////////////////
+////////edit car Name
+//////////////////////////////////////
+
+router.put('/editcarname',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+   return res.status(403).send({
+       error: `access denied`
+     })
+} else  {
+   adminController.editCarName(req, res)
+}
+
+});
+
+///////////////////////////////////////
+////////delete car Name 
+///////////////////////////////////////
+
+router.delete('/deletecarname',passport.authenticate('jwt', { session: false }), (req , res) => {
+  const reqUser = req.user
+if (reqUser.role !== 'superAdmin' && reqUser.role !=='admin') {
+   return res.status(403).send({
+       error: `access denied`
+     })
+} else  {
+   adminController.editCarName(req, res)
+}
+
+});
 
 
 

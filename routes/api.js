@@ -26,8 +26,9 @@ router.post('/acceptmobile' , (req , res) => {
 //// register user
 
 router.post('/register', function(req, res) {
+  console.log(req.body)
     if (!req.body.mobile || !req.body.password) {
-      res.json({success: false, msg: 'Please pass Mobile and password.'});
+      res.json({success: false, msg: 'Please  Mobile and password.'});
     } else {
       const newUser = new User({
         mobile: req.body.mobile,
@@ -45,7 +46,7 @@ router.post('/register', function(req, res) {
         if (err) {
           return res.json({success: false, msg: 'Mobile already exists.'});
         }
-        res.json({success: true, msg: 'Successful created new user.'});
+        res.json({success: true, newUser,msg: 'Successful created new user.'});
       });
     }
   });

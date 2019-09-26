@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user') ;
 const passport = require('passport');
 const Manufactuier = require('../models/manufactuier')
+const CarBrand = require('../models/carBrand')
 
 
 module.exports = {
@@ -105,6 +106,30 @@ async editManufactuier (req ,res) {
             error: `An error has occured ${error}`
           })
         }
-    }
+    },
+//////////////////////////////add Car Brand
+
+async addCarBrand ( req , res) {
+  try {
+    const existCarBrand = await CarBrand.findOne({name : req.body.name})
+    if(existCarBrand) {
+     return res.json({success: false, msg: 'برند خودرو مورد نظر قبلا وجود داشته است .'});
+  } 
+    const newCarBrand = await new CarBrand({
+        name: req.body.name
+        
+    }).save()
+  res.json({success: true,newCarBrand, msg: 'برند خودرو با موفقیت افزوده شد .'});
+    
+  
+  
+  } catch (error) {
+  res.status(500).send({
+  error: `An error has occured ${error}`
+  })
+  }
+}
 
 }
+
+
