@@ -8,7 +8,7 @@ const CarBrandSchema = new Schema({
         require : true,
         unique : true
     },
-    manufactuier: {
+    manufactuierId: {
         type: mongoose.Schema.Types.ObjectId ,
         trim : true ,
         require : true,

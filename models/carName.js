@@ -3,23 +3,23 @@ const Schema = mongoose.Schema;
 
 const CarNameSchema = new Schema({
     name: {
-        type: String ,
-        trim: true ,
-        require : true,
-        unique : true
+        type: String,
+        trim: true,
+        require: true,
+        unique: true
     },
-    manufactuier: {
-        type: mongoose.Schema.Types.ObjectId ,
-        trim : true ,
-        require : true,
-        ref : 'Manufactuier'
+    manufactuierId: {
+        type: mongoose.Schema.Types.ObjectId,
+        trim: true,
+        require: true,
+        ref: 'Manufactuier'
     },
-    carBrand : {
-        type: mongoose.Schema.Types.ObjectId ,
-        trim : true ,
-        require : true,
-        ref : 'CarBrand'
+    carBrandId: {
+        type: mongoose.Schema.Types.ObjectId,
+        trim: true,
+        require: true,
+        ref: 'CarBrand'
     }
-    
+
 })
 module.exports = mongoose.model('CarName', CarNameSchema);

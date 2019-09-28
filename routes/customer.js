@@ -10,16 +10,17 @@ const smsServise = require('../tools/sendMsg')
 const adminController = require('../tools/adminController')
 const customerController = require ('../tools/customerController')
 
-
+//////////////////get user profile
 router.get('/getprofile',passport.authenticate('jwt', { session: false }), (req , res) => {
 
      customerController.getProfile(req, res)
 });
 
+//////////////////// edit customer profile
 router.post('/editprofile' , passport.authenticate('jwt', { session: false }), (req , res) => {
     customerController.editProfile(req , res)
 }) ;
-
+//////////////////////delete customer profile
 router.delete ('/deleteprofile' , passport.authenticate('jwt', { session: false }), (req , res) => {
     const reqUser = req.user
     if (reqUser.role ==='admin'||reqUser.role === 'superAdmin' || reqUser._id === req.body._id) {
@@ -31,6 +32,9 @@ router.delete ('/deleteprofile' , passport.authenticate('jwt', { session: false 
     }
 }) ;
 
+////////////////////////// add customer cars 
+router.post('/addcustomercar' , passport.authenticate('jwt', { session: false }), (req , res) => {
+    customerController.addCar (req , res) })
 
 
 

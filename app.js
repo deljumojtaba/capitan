@@ -16,11 +16,12 @@ const superAdminRouter = require('./routes/superAdmin');
 const bodyParser = require('body-parser')
 require('./config/passport')(passport)
 const customerRouter = require ('./routes/customer')
+const captainRouter = require ('./routes/captain')
 
 
 
 var app = express();
-mongoose.connect(config.database);
+mongoose.connect(config.database ,  {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -40,13 +41,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 app.use('/admin', adminRouter);
 app.use('/superadmin', superAdminRouter);
 app.use('/customer', customerRouter);
+app.use('/captain', captainRouter) ; 
 
 
 
