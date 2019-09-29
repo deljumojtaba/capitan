@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const CarSchema = new Schema({
+const PartSchema = new Schema({
     manufactuier: {
         type: mongoose.Schema.Types.ObjectId,
         trim: true,
@@ -20,45 +20,27 @@ const CarSchema = new Schema({
         required: true,
         ref: 'CarBrand'
     },
-    numberPlates: {
-        type: String,
-        trim: true,
-    },
-    color: {
-        type: String,
-        trim: true
-
-    },
-    model: {
+    price: {
         type: String,
         trim: true
     },
-    gearbox: {
-        type: String,
-        trim: true,
-        enum: ['manual', ' automatic']
-    },
-    chassisNumber: {
+    name: {
         type: String,
         trim: true
     },
-    kilometers: {
+    brand: {
         type: String,
         trim: true
     },
-    lastRepair: {
-        type: Date,
-        default: Date.now()
-    },
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        trim: true,
-        require: true,
-        ref: 'User'
-    },
+    code:{
+        type : String ,
+        trim : true,
+        required : true , 
+        unique : true
+    }
 
 
 }, {
     timestamps: true
 })
-module.exports = mongoose.model('Car', CarSchema);
+module.exports = mongoose.model('Part', PartSchema);

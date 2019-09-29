@@ -1,26 +1,27 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var morgan = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const morgan = require('morgan');
 const cors = require('cors')
-var mongoose = require('mongoose');
-var passport = require('passport');
-var config = require('./config/database');
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var apiRouter = require('./routes/api');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const config = require('./config/database');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const apiRouter = require('./routes/api');
 const adminRouter = require('./routes/admin');
 const superAdminRouter = require('./routes/superAdmin');
 const bodyParser = require('body-parser')
 require('./config/passport')(passport)
 const customerRouter = require ('./routes/customer')
 const captainRouter = require ('./routes/captain')
+const serviseRouter = require ('./routes/service')
 
 
 
-var app = express();
+const app = express();
 mongoose.connect(config.database ,  {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
 
 app.use(function(req, res, next) {
@@ -48,6 +49,7 @@ app.use('/admin', adminRouter);
 app.use('/superadmin', superAdminRouter);
 app.use('/customer', customerRouter);
 app.use('/captain', captainRouter) ; 
+app.use('/service', serviseRouter) ;
 
 
 

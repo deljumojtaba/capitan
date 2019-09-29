@@ -70,6 +70,10 @@ const UserSchema = new Schema({
         trim: true 
         
 
+    },
+    expert: {
+        type : String ,
+        trim : true
     }
 
   

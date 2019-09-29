@@ -24,7 +24,8 @@ module.exports = {
             birthDay : req.body.birthDay,
             city: req.body.city,
             referenceCode: req.body.referenceCode,
-            point : '5'
+            point : '5',
+            expert : req.body.expert
 
             
         }).save()

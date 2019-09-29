@@ -36,7 +36,20 @@ router.delete ('/deleteprofile' , passport.authenticate('jwt', { session: false 
 router.post('/addcustomercar' , passport.authenticate('jwt', { session: false }), (req , res) => {
     customerController.addCar (req , res) })
 
-
+//////////////////////////// edit customer car
+router.put('/editcustomercar' , passport.authenticate('jwt', { session: false }), (req , res) => {
+    customerController.editCar (req , res) })
+///////////////////////////
+///get customer cars
+//////////////////////////
+router.get('/customercars' , passport.authenticate('jwt', { session: false }), (req , res) => {
+    customerController.getCar (req , res) })
+////////////////////////////
+////delete customer car 
+////////////////////////////
+router.delete('/deletecustomercar', passport.authenticate('jwt', { session:false}), (req , res) => {
+   customerController.deleteCar (req , res) })
+    
 
 
 
