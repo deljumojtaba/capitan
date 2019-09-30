@@ -81,11 +81,7 @@ router.post('/login', function (req, res) {
       // check if password matches
       user.comparePassword(req.body.password, function (err, isMatch) {
         if (isMatch && !err) {
-          // // if user is found and password is right create a token
-          // const token = jwt.sign(user.toJSON(), config.secret, {
-          //     expiresIn: 604800 }) // 1 week
-          // // return the information including token as JSON
-          // res.json({success: true, user ,token: 'jwt ' + token});
+         
           const token = jwt.sign(user.toJSON(), config.secret, {
             expiresIn: 604800 // 1 week
           })

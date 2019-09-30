@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-var passport = require('passport');
-var config = require('../config/database');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const config = require('../config/database');
 require('../config/passport')(passport);
-var express = require('express');
-var jwt = require('jsonwebtoken');
-var router = express.Router();
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const router = express.Router();
 const smsServise = require('../tools/sendMsg')
 const captainController = require('../tools/captainController')
 const customerController = require('../tools/customerController')

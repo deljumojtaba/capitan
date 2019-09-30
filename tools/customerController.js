@@ -3,7 +3,7 @@ const config = require('../config/database');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user')
 const Car = require('../models/car')
-
+const shortid = require('shortid');
 
 
 module.exports = {
@@ -167,6 +167,62 @@ module.exports = {
         error: `An error has occured ${error}`
       })
     }
+  },
+  /////////////////////////chang password
+  // async changPassword (req , res) {
+  //   try {
+  //      const user = await User.findById(req.user._id)
+  //      if(!user) {
+  //      return res.json({
+  //       success: false,
+  //       message: 'User not fuond'
+  //     })
+  //   } else {
+  //     // check if password matches
+  //     user.comparePassword(req.body.oldPassword, function (err, isMatch) {
+  //       if (isMatch && !err) {
+  //         user.password = req.body.newPassword 
+  //         return res.json({
+  //           success: true,
+  //           message: 'User password change'
+  //         })
+  //       }
+  //     })
+  //   }
+
+  //   } catch (error) {
+  //     res.status(400).send({
+  //       error: `An error has occured ${error}`
+  //     })
+  //   }
+  // }
+  async sendSos(req, res) {
+    try {
+   let sosId = shortid.generate();
+    const newSos = await new Sos({
+      car: req.body.carId,
+      location: req.body.location,
+      address: req.body.address,
+      description: req.body.description,
+      service: req.body.service,
+      part: req.body.part,
+      sosId: sosId
+     
+
+    }).save()
+    res.json({
+      success: true,
+      newCar,
+      msg: 'خودرو با موفقیت افزوده شد '
+    });
+
+
+  } catch (error) {
+    res.status(500).send({
+      error: `An error has occured ${error}`
+    })
   }
+
+},
 
 }

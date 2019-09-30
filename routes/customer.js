@@ -49,9 +49,17 @@ router.get('/customercars' , passport.authenticate('jwt', { session: false }), (
 ////////////////////////////
 router.delete('/deletecustomercar', passport.authenticate('jwt', { session:false}), (req , res) => {
    customerController.deleteCar (req , res) })
-    
+////////////////////////////
+////chang password
+////////////////////////////
+router.put('/changpassword', passport.authenticate('jwt', { session:false}), (req , res) => {
+    customerController.changPassword (req , res) })
 
-
+//////////////////////////
+////request sos
+/////////////////////////
+router.post('/sendsos', passport.authenticate('jwt', { session:false}), (req , res) => {
+    customerController.sendSos (req , res) })
 
 
 module.exports = router;
