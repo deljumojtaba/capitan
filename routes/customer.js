@@ -9,19 +9,19 @@ var User = require("../models/user");
 const smsServise = require('../tools/sendMsg')
 const adminController = require('../tools/adminController')
 const customerController = require ('../tools/customerController')
-
+const mid = require('../tools/mid')
 //////////////////get user profile
-router.get('/getprofile',passport.authenticate('jwt', { session: false }), (req , res) => {
+router.get('/getprofile',passport.authenticate('jwt', { session: false }),mid.test, (req , res) => {
 
      customerController.getProfile(req, res)
 });
 
 //////////////////// edit customer profile
-router.post('/editprofile' , passport.authenticate('jwt', { session: false }), (req , res) => {
+router.post('/editprofile' , passport.authenticate('jwt', { session: false }),mid.test, (req , res) => {
     customerController.editProfile(req , res)
 }) ;
 //////////////////////delete customer profile
-router.delete ('/deleteprofile' , passport.authenticate('jwt', { session: false }), (req , res) => {
+router.delete ('/deleteprofile' , passport.authenticate('jwt', { session: false }),mid.test, (req , res) => {
     const reqUser = req.user
     if (reqUser.role ==='admin'||reqUser.role === 'superAdmin' || reqUser._id === req.body._id) {
     customerController.deleteUser(req , res)
@@ -33,32 +33,32 @@ router.delete ('/deleteprofile' , passport.authenticate('jwt', { session: false 
 }) ;
 
 ////////////////////////// add customer cars 
-router.post('/addcustomercar' , passport.authenticate('jwt', { session: false }), (req , res) => {
+router.post('/addcustomercar' , passport.authenticate('jwt', { session: false }),mid.test, (req , res) => {
     customerController.addCar (req , res) })
 
 //////////////////////////// edit customer car
-router.put('/editcustomercar' , passport.authenticate('jwt', { session: false }), (req , res) => {
+router.put('/editcustomercar' , passport.authenticate('jwt', { session: false }),mid.test, (req , res) => {
     customerController.editCar (req , res) })
 ///////////////////////////
 ///get customer cars
 //////////////////////////
-router.get('/customercars' , passport.authenticate('jwt', { session: false }), (req , res) => {
+router.get('/customercars' , passport.authenticate('jwt', { session: false }),mid.test, (req , res) => {
     customerController.getCar (req , res) })
 ////////////////////////////
 ////delete customer car 
 ////////////////////////////
-router.delete('/deletecustomercar', passport.authenticate('jwt', { session:false}), (req , res) => {
+router.delete('/deletecustomercar', passport.authenticate('jwt', { session:false}),mid.test, (req , res) => {
    customerController.deleteCar (req , res) })
 ////////////////////////////
 ////chang password
 ////////////////////////////
-router.put('/changpassword', passport.authenticate('jwt', { session:false}), (req , res) => {
+router.put('/changpassword', passport.authenticate('jwt', { session:false}),mid.test, (req , res) => {
     customerController.changPassword (req , res) })
 
 //////////////////////////
 ////request sos
 /////////////////////////
-router.post('/sendsos', passport.authenticate('jwt', { session:false}), (req , res) => {
+router.post('/sendsos', passport.authenticate('jwt', { session:false}),mid.test, (req , res) => {
     customerController.sendSos (req , res) })
 
 

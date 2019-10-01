@@ -7,25 +7,25 @@ var jwt = require('jsonwebtoken');
 var router = express.Router();
 var User = require("../models/user");
 const smsServise = require('../tools/sendMsg')
-
+const mid = require('../tools/mid')
 
 /////// send Messeage
 
-router.post('/registermobile', (req, res) => {
+router.post('/registermobile',mid.test, (req, res) => {
   smsServise.registerMobile(req, res)
 
 });
 
 
 
-router.post('/acceptmobile', (req, res) => {
+router.post('/acceptmobile',mid.test, (req, res) => {
   smsServise.acceptMobile(req, res)
 })
 
 
 //// register user
 
-router.post('/register', function (req, res) {
+router.post('/register',mid.test, function (req, res) {
   console.log(req.body)
   if (!req.body.mobile || !req.body.password) {
     res.json({
@@ -63,7 +63,7 @@ router.post('/register', function (req, res) {
 
 ////login
 
-router.post('/login', function (req, res) {
+router.post('/login',mid.test, function (req, res) {
   User.findOne({
     mobile: req.body.mobile
   }, function (err, user) {
@@ -106,7 +106,7 @@ router.post('/login', function (req, res) {
 /////////////////////////////////////
 //// add super admin
 ////////////////////////////////////
-router.post('/addsuperadmin', async (req, res) => {
+router.post('/addsuperadmin',mid.test, async (req, res) => {
   try {
     const superAdmin = await User.findOne({
       role: 'superAdmin'

@@ -7,14 +7,14 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const smsServise = require('../tools/sendMsg')
 const serviceController = require('../tools/serviceController')
-
+const mid = require('../tools/mid')
 
 
 /////////////////////////////add Service
 
 router.post('/addservise', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}), mid.test, (req, res) => {
     const reqUser = req.user
     if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
         return res.status(403).send({
@@ -30,7 +30,7 @@ router.post('/addservise', passport.authenticate('jwt', {
 
 router.put('/editservice', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
     const reqUser = req.user
     if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
         serviceController.editService(req, res)
@@ -47,7 +47,7 @@ router.put('/editservice', passport.authenticate('jwt', {
 
 router.delete('/deleteservice', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
     console.log(req.user)
     const reqUser = req.user
     if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
@@ -64,7 +64,7 @@ router.delete('/deleteservice', passport.authenticate('jwt', {
 
 router.post('/addpart', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
     const reqUser = req.user
     if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
         return res.status(403).send({
@@ -80,7 +80,7 @@ router.post('/addpart', passport.authenticate('jwt', {
 
 router.put('/editpart', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
     const reqUser = req.user
     if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
         serviceController.editPart(req, res)
@@ -95,7 +95,7 @@ router.put('/editpart', passport.authenticate('jwt', {
 
 router.delete('/deletepart', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
     const reqUser = req.user
     if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
         serviceController.deletePart (req, res)

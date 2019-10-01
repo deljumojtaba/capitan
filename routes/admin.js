@@ -9,12 +9,12 @@ var User = require("../models/user");
 const smsServise = require('../tools/sendMsg')
 const adminController = require('../tools/adminController')
 const carController = require('../tools/carController')
-
+const mid = require('../tools/mid')
 
 
 router.post('/addcustomer', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -32,7 +32,7 @@ router.post('/addcustomer', passport.authenticate('jwt', {
 ///////////////////////////////////
 router.get('/allcustomer', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -50,7 +50,7 @@ router.get('/allcustomer', passport.authenticate('jwt', {
 
 router.post('/addmanufactuier', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -68,7 +68,7 @@ router.post('/addmanufactuier', passport.authenticate('jwt', {
 
 router.delete('/deletemanufactuier', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -86,7 +86,7 @@ router.delete('/deletemanufactuier', passport.authenticate('jwt', {
 
 router.put('/editmanufactuier', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -104,7 +104,7 @@ router.put('/editmanufactuier', passport.authenticate('jwt', {
 
 router.post('/addbrandcar', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -122,7 +122,7 @@ router.post('/addbrandcar', passport.authenticate('jwt', {
 
 router.put('/editbrandcar', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -140,7 +140,7 @@ router.put('/editbrandcar', passport.authenticate('jwt', {
 
 router.delete('/deletebrandcar', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -158,7 +158,7 @@ router.delete('/deletebrandcar', passport.authenticate('jwt', {
 
 router.post('/addcarname', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -176,7 +176,7 @@ router.post('/addcarname', passport.authenticate('jwt', {
 
 router.put('/editcarname', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -194,7 +194,7 @@ router.put('/editcarname', passport.authenticate('jwt', {
 
 router.delete('/deletecarname', passport.authenticate('jwt', {
   session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
   const reqUser = req.user
   if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
     return res.status(403).send({
@@ -207,6 +207,74 @@ router.delete('/deletecarname', passport.authenticate('jwt', {
 });
 ////////////////////////////////////////
 //////// 
+////////////////////////////////////////
+////////  show blocked users  M-K
+//////////////////////////////////
+
+
+router.get('/blockedUser', passport.authenticate('jwt', {
+  session: false
+}),mid.test, (req, res) => {
+  const reqUser = req.user
+  if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
+    return res.status(403).send({
+      error: `access denied`
+    })
+  } else {
+    adminController.blockedUser(req, res)
+  }
+
+});
+
+//////////*********** show unBlock users  M-K ************//////////////////
+
+router.get('/unblockUser', passport.authenticate('jwt', {
+  session: false
+}),mid.test ,(req, res) => {
+  const reqUser = req.user;
+  if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
+    return res.status(403).send({
+      error: `access denied`
+    })
+  } else {
+    adminController.unblockUser(req, res)
+  }
+
+});
+
+////////////////////////// blocking  M-K /////////////////
+
+router.put('/blocking', passport.authenticate('jwt', {
+  session: false
+}),mid.test, (req, res) => {
+  const reqUser = req.user
+  if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
+    return res.status(403).send({
+      error: `access denied`
+    })
+  } else {
+    adminController.blocking(req, res)
+  }
+
+});
+
+/////////////////////// unblocking   M-K /////////////////
+
+router.put('/unblocking', passport.authenticate('jwt', {
+  session: false
+}),mid.test, (req, res) => {
+  const reqUser = req.user
+  if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
+    return res.status(403).send({
+      error: `access denied`
+    })
+  } else {
+    adminController.unblocking(req, res)
+  }
+
+});
+
+////////////////////////////////////////////////////
 
 
 
