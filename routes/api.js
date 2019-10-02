@@ -15,9 +15,6 @@ router.post('/registermobile',mid.test, (req, res) => {
   smsServise.registerMobile(req, res)
 
 });
-
-
-
 router.post('/acceptmobile',mid.test, (req, res) => {
   smsServise.acceptMobile(req, res)
 })
