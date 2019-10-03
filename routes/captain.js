@@ -60,5 +60,19 @@ router.get('/allcaptain', passport.authenticate('jwt', {
     }
 });
 
+/////////////////////////// add captainplus
+router.post('/addcaptainplus', passport.authenticate('jwt', {
+    session: false
+}),mid.test, (req, res) => {
+    const reqUser = req.user
+    if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
+        return res.status(403).send({
+            error: `access denied`
+        })
+    } else {
+        captainController.addCaptainPlus(req, res)
+    }
+});
+
 
 module.exports = router;

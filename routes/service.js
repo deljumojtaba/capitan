@@ -105,6 +105,14 @@ router.delete('/deletepart', passport.authenticate('jwt', {
         })
     }
 });
+//////////////////////// sos Problem
+router.post('/addproblem', passport.authenticate('jwt', {
+    session: false
+}),mid.test, (req, res) => {
+
+        serviceController.addProblem(req, res)
+    
+});
 
 
 module.exports = router;
