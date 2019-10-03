@@ -8,13 +8,14 @@ const router = express.Router();
 const smsServise = require('../tools/sendMsg')
 const captainController = require('../tools/captainController')
 const customerController = require('../tools/customerController')
+const mid = require('../tools/mid')
 
 /////////////////////////////////////////
 ////////////add captain
 ////////////////////////////////////////
 router.post('/addcaptain', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
     const reqUser = req.user
     if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
         return res.status(403).send({
@@ -24,19 +25,16 @@ router.post('/addcaptain', passport.authenticate('jwt', {
         captainController.addCaptain(req, res)
     }
 });
-
 /////////////////////////////// edit captain
-
 router.post('/editcaptain', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
     captainController.editCaptain(req, res)
 });
-
 //////////////////////////////delete captain
 router.delete('/deletecaptain', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
     const reqUser = req.user
     if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
         captainController.deleteCaptain(req, res)
@@ -51,7 +49,7 @@ router.delete('/deletecaptain', passport.authenticate('jwt', {
 
 router.get('/allcaptain', passport.authenticate('jwt', {
     session: false
-}), (req, res) => {
+}),mid.test, (req, res) => {
     const reqUser = req.user
     if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
         captainController.allCaptain(req, res)
@@ -61,8 +59,6 @@ router.get('/allcaptain', passport.authenticate('jwt', {
         })
     }
 });
-
-
 
 
 module.exports = router;

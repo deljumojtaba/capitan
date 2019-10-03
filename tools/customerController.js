@@ -10,6 +10,7 @@ const api = Kavenegar.KavenegarApi({
     apikey: '655A4D716767785037385543704C616F692B6F535231693054696C52463870484A4C2B316A3376437333343D'
 });
 
+const Creditcard = require('../models/creditCard')
 
 module.exports = {
 
@@ -153,7 +154,7 @@ module.exports = {
       })
     }
 
-  } ,
+  },
   ////////////////////////delete customer car
   async deleteCar(req, res) {
     try {
@@ -203,6 +204,7 @@ module.exports = {
   // }
   async sendSos(req, res) {
     try {
+
    let sosId = shortid.generate();
     const newSos = await new Sos({
       car: req.body.carId,
@@ -241,11 +243,138 @@ function(response, status) {
 });
    
   } catch (error) {
-    res.status(500).send({
+    res.status(500).send({ error
+    })
+
+  }
+
+  },
+
+  ///////// add credit card////////////
+  ////////////////////////////////////
+  async addCreditCard(req, res) {
+    const existCredit = await Creditcard.findOne({
+      cardNumber: req.body.cardNumber
+    })
+    if (!existCredit) {
+      try {
+        const newCreditCard = await new Creditcard({
+          customerID: req.user._id,
+          cardNumber: req.body.cardNumber
+        })
+
+        newCreditCard.save((err, credit) => {
+          console.log(err)
+          if (err) {
+            res.json({
+              success: false,
+              msg: "شماره کارت 16 رقم باید باشد"
+            })
+          }
+          if (credit) {
+            res.json({
+              success: true,
+              newCreditCard,
+              msg: 'کارت با موفقیت ثبت شد'
+            })
+          }
+        })
+
+      } catch (error) {
+        res.status(500).send({
+          error: `An error has occured ${error}`
+        })
+      }
+    } else {
+      return res.json({
+        success: false,
+        msg: " قبلا وارد شده"
+      })
+    }
+  },
+  ////////////////////////////delete credit card //////////////////
+  async deleteCard(req, res) {
+    try {
+      const deleteCreditCard = await Creditcard.findByIdAndDelete(req.body._id)
+      if (!deleteCreditCard) {
+        return res.json({
+          success: false,
+          msg: "کارت پاک نشد"
+        })
+      } else {
+        return res.json({
+          success: true,
+          deleteCreditCard,
+          msg: "کارت مورد نظر با موفقیت پاک شد"
+        })
+      }
+
+    } catch (error) {
+      res.status(400).send({
+        error: `An error has occured ${error}`
+      })
+    }
+  },
+  //////////////////////////edit credit card /////////////////////////
+  async editCreditCard(req, res) {
+
+    try {
+      const obj = {
+        _id: req.body._id
+      };
+
+      let editCreditcard = await Creditcard.findByIdAndUpdate(obj, req.body)
+      if (!editCreditcard) return res.json({
+        success: false,
+        message: 'کارت وجود ندارد'
+      })
+      await editCreditcard.save();
+      editCreditcard = await Creditcard.findById(obj)
+      await res.json({
+        success: true,
+        editCreditcard,
+        message: 'کارت با موفقیت ویرایش شد .'
+      })
+
+    } catch (error) {
+      res.status(400).send({
+        error: `An error has occured ${error}`
+      })
+    }
+  },
+///////////// get all yours credit cards  ///////
+async getYoursCards (req , res){
+  try{
+    const YoursCards = await Creditcard.find({
+      customerID: req.user._id
+    })
+    if (!YoursCards) return res.json({
+      success: false,
+      msg: 'کارت پیدا نشد'
+    });
+    res.json({
+      success: true,
+      YoursCards,
+      msg: ' تمام حساب های شما .'
+    });
+  }catch (error){
+    res.status(400).send({
       error: `An error has occured ${error}`
     })
   }
-
 },
-
+////////////////////////// get AllCredits from admin and superAdmin ///////////////////
+async getAllCredits(req ,res){
+  try{
+    const AllCards = await Creditcard.find({})
+    if(!AllCards){
+      return res.json({success:false , msg:'کارت پیدا نشد'})
+    }
+    res.json({success: true , AllCards , msg:' تمام حساب ها '})
+  }catch(error){
+    res.status(400).send({
+      error: `An error has occured ${error}`
+    })
+  }
+}
 }
