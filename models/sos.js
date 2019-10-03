@@ -24,13 +24,11 @@ const SosSchema = new Schema({
     service : {
         type: mongoose.Schema.Types.ObjectId ,
         trim : true ,
-        require : true,
         ref : 'Service'
     } ,
     part : {
         type: mongoose.Schema.Types.ObjectId ,
         trim : true ,
-        require : true,
         ref : 'Part'
 
     } , 
@@ -38,6 +36,13 @@ const SosSchema = new Schema({
         type : String ,
         trim : true ,
         required : true
+    } ,
+    condition : {
+        type : String ,
+        trim : true ,
+        required : true ,
+        default : 'pending',
+        enum : ['pending','registered','captainSmove','undeRepair','finished']
     }
     } , {
     timestamps: true

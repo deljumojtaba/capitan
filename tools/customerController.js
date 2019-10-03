@@ -4,6 +4,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user')
 const Car = require('../models/car')
 const shortid = require('shortid');
+const Sos = require ('../models/sos')
+const Kavenegar = require('kavenegar');
+const api = Kavenegar.KavenegarApi({
+    apikey: '655A4D716767785037385543704C616F692B6F535231693054696C52463870484A4C2B316A3376437333343D'
+});
 
 
 module.exports = {
@@ -206,17 +211,35 @@ module.exports = {
       description: req.body.description,
       service: req.body.service,
       part: req.body.part,
-      sosId: sosId
+      sosId: sosId,
+      
      
 
     }).save()
-    res.json({
-      success: true,
-      newCar,
-      msg: 'خودرو با موفقیت افزوده شد '
-    });
-
-
+    // res.json({
+    //   success: true,
+    //   newSos,
+    //   msg: 'درخواست با موفقیت ثبت شد '
+    // });
+  
+////////send sms to responible Captain
+const responibleCaptain = await User.findOne ({role:'responsibleCaptain'})
+let mobileNumber = responibleCaptain.mobile
+let msg = `یک درخواست جدید به شماره ${sosId} ثبت شده است جهت مشاهده به پنل خودتان مراجعه کنید`
+api.Send({
+  message: msg,
+  sender: "2000004346",
+  receptor: mobileNumber
+},
+function(response, status) {
+  console.log(response);
+  console.log(status);
+  res.send({
+      status , 
+      response
+  })
+});
+   
   } catch (error) {
     res.status(500).send({
       error: `An error has occured ${error}`
