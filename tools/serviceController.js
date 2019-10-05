@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const smsServise = require('./sendMsg')
 const Service = require('../models/service')
 const Part = require('../models/part')
+const SosProblem = require ('../models/sosproblem')
 
 
 module.exports = {
@@ -165,12 +166,12 @@ module.exports = {
         }
     },
     //////// delete part
-    async addProblem(req, res) {
+    async deletePart(req, res) {
         try {
-            const sosproblem = await SosProblem.findOne(req.body.problemId)
-            if (sosproblem) return res.json({
+            const part = await Part.findByIdAndDelete(req.body._id)
+            if (!part) return res.json({
                 success: false,
-                message: 'Id has bin fuond'
+                message: 'Part Name not fuond'
             })
             return res.json({
                 part,
@@ -183,28 +184,33 @@ module.exports = {
             })
         }
     } ,
-    async addService(req, res) {
+    //////////////// add problem
+    async addProblem(req, res) {
         try {
-            const existService = await Service.findOne({
-                name: req.body.name
+            const existProblem = await Service.findOne({
+                problemId: req.body.problemId
             })
-            if (existService) {
+            if (existProblem) {
                 return res.json({
                     success: false,
-                    msg: 'نام خدمات مورد نظر قبلا وجود داشته است .'
+                    msg: 'شماره خدمات مورد نظر قبلا وجود داشته است .'
                 });
             }
-            const newService = await new Service({
-                name: req.body.name,
-                carName: req.body.carNameId,
-                carBrand: req.body.carBrandId,
-                price: req.body.price
+            const newProblem = await new SosProblem({
+                problemId: req.body.problemId,
+                userPhone: req.body.userPhone,
+                address: req.body.address,
+                carType: req.body.carType ,
+                problem : req.body.problem ,
+                numberPlates : req.body.numberPlates ,
+                dateOfProblem : req.body.dateOfProblem ,
+                timeOfProblem : req.body.timeOfProblem
 
             }).save()
             res.json({
                 success: true,
-                newService,
-                msg: 'نام خدمات با موفقیت افزوده شد .'
+                newProblem,
+                msg: 'درخواست خدمات با موفقیت ثبت شد .'
             });
 
 
