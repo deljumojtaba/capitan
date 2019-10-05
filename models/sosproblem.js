@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const SosSchema = new Schema({
-    car: {
-        type: mongoose.Schema.Types.ObjectId ,
+const SosProblem = new Schema({
+    problemId: {
+        type: String,
         trim : true ,
         require : true,
-        ref : 'Car'
     },
-    location : {
+    userPhone : {
         type : String ,
         trim : true 
     },
@@ -17,35 +16,39 @@ const SosSchema = new Schema({
         trim : true 
 
     } ,
-    description : {
+    carType : {
         type : String ,
         trim : true
     } ,
-    service : {
-        type: mongoose.Schema.Types.ObjectId ,
+    problem : {
         trim : true ,
-        ref : 'Service'
+        type : String
     } ,
-    part : {
-        type: mongoose.Schema.Types.ObjectId ,
+    numberPlates : {
+        type: String ,
         trim : true ,
-        ref : 'Part'
 
     } , 
-    sosId : {
+    dateOfProbleme : {
         type : String ,
         trim : true ,
         required : true
     } ,
+    timeOfProbleme : {
+        type : String ,
+        trim : true ,
+        required : true 
+       
+    },
     condition : {
         type : String ,
         trim : true ,
         required : true ,
-        default : 'pending',
-        enum : ['pending','registered','captainSmove','undeRepair','finished']
+        default : 'registered',
+        enum : ['registered','captainSmove','finished']
     }
     } , {
     timestamps: true
     })
     
-module.exports = mongoose.model('Sos', SosSchema);
+module.exports = mongoose.model('SosProblem', SosProblem);

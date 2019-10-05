@@ -79,6 +79,38 @@ async editCaptain (req ,res) {
               error: `An error has occured ${error}`
             })
           }
-      }
+      } ,
+      /////////////////// add captain
+      async addCaptainPlus (req , res) {
+        try {
+        const existCaptain = await User.findOne({mobile : req.body.mobile})
+        if(existCaptain) {
+         return res.json({success: false, msg: 'شماره موبایل وارد شده قبلا وارد شده است'});
+    } 
+        const newCaptain = await new User({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            mobile: req.body.mobile,
+            password: req.body.password,
+            role: 'captainplus',
+            email:req.body.email,
+            birthDay : req.body.birthDay,
+            city: req.body.city,
+            referenceCode: req.body.referenceCode,
+            point : '5',
+            expert : req.body.expert
+
+            
+        }).save()
+      res.json({success: true,newCaptain, msg: 'کاپیتان با موفقیت افزوده شد .'});
+        
+
+    
+} catch (error) {
+    res.status(500).send({
+      error: `An error has occured ${error}`
+    })
+  }
+} 
 
 }

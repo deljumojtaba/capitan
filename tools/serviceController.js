@@ -165,12 +165,12 @@ module.exports = {
         }
     },
     //////// delete part
-    async deletePart(req, res) {
+    async addProblem(req, res) {
         try {
-            const part = await Part.findByIdAndDelete(req.body._id)
-            if (!part) return res.json({
+            const sosproblem = await SosProblem.findOne(req.body.problemId)
+            if (sosproblem) return res.json({
                 success: false,
-                message: 'Part Name not fuond'
+                message: 'Id has bin fuond'
             })
             return res.json({
                 part,
@@ -182,5 +182,38 @@ module.exports = {
                 error: `An error has occured ${error}`
             })
         }
-    }
+    } ,
+    async addService(req, res) {
+        try {
+            const existService = await Service.findOne({
+                name: req.body.name
+            })
+            if (existService) {
+                return res.json({
+                    success: false,
+                    msg: 'نام خدمات مورد نظر قبلا وجود داشته است .'
+                });
+            }
+            const newService = await new Service({
+                name: req.body.name,
+                carName: req.body.carNameId,
+                carBrand: req.body.carBrandId,
+                price: req.body.price
+
+            }).save()
+            res.json({
+                success: true,
+                newService,
+                msg: 'نام خدمات با موفقیت افزوده شد .'
+            });
+
+
+
+        } catch (error) {
+            res.status(500).send({
+                error: `An error has occured ${error}`
+            })
+        }
+    },
+
 }

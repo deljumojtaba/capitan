@@ -37,7 +37,7 @@ const UserSchema = new Schema({
       type : String ,
       trim : true,
       required : true ,
-      enum: ['customer', 'admin', 'superAdmin','captain','responsibleForPurchase','warehouseKeeper', 'responsibleCaptain']
+      enum: ['customer', 'admin', 'superAdmin','captain','responsibleForPurchase','warehouseKeeper', 'captainplus']
 
     },
     block : {
