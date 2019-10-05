@@ -11,6 +11,7 @@ const adminController = require('../tools/adminController')
 const customerController = require ('../tools/customerController')
 const mid = require('../tools/mid')
 const Creditcard = require('../models/creditCard')
+const carController = require('../tools/carController')
 
 //////////////////get user profile
 router.get('/getprofile',passport.authenticate('jwt', { session: false }),mid.test, (req , res) => {
@@ -97,4 +98,67 @@ router.get('/getAllCredits' , passport.authenticate('jwt',{session:false}) , mid
         })
     }
 })
+
+/////////////////////////////////////////////
+////// get all mannufactuier
+////////////////////////////////////////////
+
+router.get('/getallmanufactuier', passport.authenticate('jwt', {
+    session: false
+  }),mid.test, (req, res) => {
+    
+      carController.getAllManufactuier(req, res)
+
+  });
+
+/////////////////////////////////////////////
+////// get all carBrand
+////////////////////////////////////////////
+
+router.get('/getallcarbrand', passport.authenticate('jwt', {
+    session: false
+  }),mid.test, (req, res) => {
+    
+      carController.getAllCarBrand(req, res)
+
+  });
+
+  /////////////////////////////////////////////
+////// get all carName
+////////////////////////////////////////////
+
+router.get('/getallcarname', passport.authenticate('jwt', {
+    session: false
+  }),mid.test, (req, res) => {
+    
+      carController.getAllCarName(req, res)
+
+  });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/********************** show carBrand by filter from mannufactuier***********************/
+//////////////////////////////////////////////////////////////////////////////////////////
+
+router.post('/showcarbrand', passport.authenticate('jwt', {
+    session: false
+  }),mid.test, (req, res) => {
+    
+      carController.showCarBrand(req, res)
+
+  });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/********************** show carBrand by filter from mannufactuier***********************/
+//////////////////////////////////////////////////////////////////////////////////////////
+
+router.post('/showcarname', passport.authenticate('jwt', {
+    session: false
+  }),mid.test, (req, res) => {
+    
+      carController.showCarName(req, res)
+
+  });
+
+
+
 module.exports = router;
