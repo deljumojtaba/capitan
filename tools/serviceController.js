@@ -3,12 +3,15 @@ const passport = require('passport');
 const config = require('../config/database');
 require('../config/passport')(passport);
 const express = require('express');
-const jwt = require('jsonwebtoken');
+const User = require ('../models/user')
 const smsServise = require('./sendMsg')
 const Service = require('../models/service')
 const Part = require('../models/part')
-const SosProblem = require ('../models/sosproblem')
-
+const SosProblem = require('../models/sosproblem')
+var Kavenegar = require('kavenegar');
+var api = Kavenegar.KavenegarApi({
+    apikey: '655A4D716767785037385543704C616F692B6F535231693054696C52463870484A4C2B316A3376437333343D'
+});
 
 module.exports = {
 
@@ -183,11 +186,11 @@ module.exports = {
                 error: `An error has occured ${error}`
             })
         }
-    } ,
+    },
     //////////////// add problem
     async addProblem(req, res) {
         try {
-            const existProblem = await Service.findOne({
+            const existProblem = await SosProblem.findOne({
                 problemId: req.body.problemId
             })
             if (existProblem) {
@@ -200,26 +203,77 @@ module.exports = {
                 problemId: req.body.problemId,
                 userPhone: req.body.userPhone,
                 address: req.body.address,
-                carType: req.body.carType ,
-                problem : req.body.problem ,
-                numberPlates : req.body.numberPlates ,
-                dateOfProblem : req.body.dateOfProblem ,
-                timeOfProblem : req.body.timeOfProblem
+                carType: req.body.carType,
+                problem: req.body.problem,
+                numberPlates: req.body.numberPlates,
+                dateOfProblem: req.body.dateOfProblem,
+                timeOfProblem: req.body.timeOfProblem
 
             }).save()
-            res.json({
-                success: true,
-                newProblem,
-                msg: 'درخواست خدمات با موفقیت ثبت شد .'
+            //////////////////// send message to captainplus
+        const captainPlus = await User.findOne({ role: 'captainplus' })
+        let mobileNumber = captainPlus.mobile
+        let msg = `یک درخواست جدید به شماره ${req.body.problemId} ثبت شده است جهت مشاهده به پنل خودتان مراجعه کنید`
+        api.Send({
+            message: msg,
+            sender: "0013658000175",
+            receptor: mobileNumber
+        },
+            function (response, status) {
+                console.log(response);
+                console.log(status);
+                res.json({
+                    status,
+                    success: true,
+                    msg: 'درخواست خدمات با موفقیت ثبت شد .',
+                    response,
+                    newProblem
+                })
             });
-
-
+            // res.json({
+            //     success: true,
+            //     newProblem,
+            //     msg: 'درخواست خدمات با موفقیت ثبت شد .'
+            // });
 
         } catch (error) {
             res.status(500).send({
                 error: `An error has occured ${error}`
             })
         }
-    },
+        
 
+
+
+
+    },
+    //////////////////// get all problems
+    async getAllProblems(req, res) {
+        try {
+            const AllProblems = await SosProblem.find({})
+            if (!AllProblems || AllProblems.length === 0) {
+                return res.json({ success: false, msg: 'درخواستی وجود ندارد  ' })
+            }
+            res.json({ success: true, AllProblems, msg: ' لیست کل درخواست ها ' })
+        } catch (error) {
+            res.status(400).send({
+                error: `An error has occured ${error}`
+            })
+        }
+    },
+    /////////////////// get problem condition
+    async getConditionProblem(req, res) {
+        try {
+            let reqCondition = req.body.condition
+            const conditionProblem = await SosProblem.find({ condition: reqCondition })
+            if (!conditionProblem || conditionProblem.length === 0) {
+                return res.json({ success: false, msg: 'درخواستی وجود ندارد  ' })
+            }
+            res.json({ success: true, conditionProblem, msg: ' لیست کل درخواست ها ' })
+        } catch (error) {
+            res.status(400).send({
+                error: `An error has occured ${error}`
+            })
+        }
+    }
 }

@@ -15,16 +15,17 @@ const adminRouter = require('./routes/admin');
 const superAdminRouter = require('./routes/superAdmin');
 const bodyParser = require('body-parser')
 require('./config/passport')(passport)
-const customerRouter = require ('./routes/customer')
-const captainRouter = require ('./routes/captain')
-const serviseRouter = require ('./routes/service')
+const customerRouter = require('./routes/customer')
+const captainRouter = require('./routes/captain')
+const serviseRouter = require('./routes/service')
+const captainPlusRouter = require('./routes/captainplus')
 
 
 
 const app = express();
-mongoose.connect(config.database ,  {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
+mongoose.connect(config.database, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -48,20 +49,21 @@ app.use('/api', apiRouter);
 app.use('/admin', adminRouter);
 app.use('/superadmin', superAdminRouter);
 app.use('/customer', customerRouter);
-app.use('/captain', captainRouter) ; 
-app.use('/service', serviseRouter) ;
+app.use('/captain', captainRouter);
+app.use('/service', serviseRouter);
+app.use('/captainplus', captainPlusRouter);
 
 
 
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
