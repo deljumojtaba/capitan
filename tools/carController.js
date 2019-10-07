@@ -182,7 +182,7 @@ module.exports = {
       const newCarName = await new CarName({
         name: req.body.name,
         manufactuierId: req.body.manufactuierId,
-        carbrandId: req.body.carbrandId,
+        carBrandId: req.body.carBrandId,
 
 
       }).save()
@@ -246,6 +246,106 @@ module.exports = {
         error: `An error has occured ${error}`
       })
     }
+  },
+
+////////////////get all manufactuier
+async getAllManufactuier(req, res) {
+  try {
+    const Manufactuiers =  await Manufactuier.find({},{__v:0})
+    if (!Manufactuiers||Manufactuiers.length===0) return res.json({
+      success: false,
+      message: 'هیچ کارخانه ی سازنده ای ثبت نشده است'
+    })
+    res.json({
+      success: true,
+      Manufactuiers,
+      message: 'لیست کامل کارخانه سازنده خودرو'
+    })
+  } catch (error) {
+    res.status(400).send({
+      error: `An error has occured ${error}`
+    })
   }
+},
+////////////////get all carBrand
+
+async getAllCarBrand(req, res) {
+  try {
+    const carBrands =  await CarBrand.find({},{__v:0}).populate('manufactuierId',{__v:0}).exec()
+    if (!carBrands||carBrands.length===0) return res.json({
+      success: false,
+      message: 'هیچ برند خودرویی ثبت نشده است.'
+    })
+    res.json({
+      success: true,
+      carBrands,
+      message: 'لیست کامل برند خودرو'
+    })
+  } catch (error) {
+    res.status(400).send({
+      error: `An error has occured ${error}`
+    })
+  }
+},
+
+////////////////get all carName
+
+async getAllCarName(req, res) {
+  try {
+    const carNames =  await CarName.find({},{}).populate('manufactuierId',{__v:0}).populate('carBrandId',{__v:0}).exec()
+    if (!carNames||carNames.length===0) return res.json({
+      success: false,
+      message: 'هیچ خودرویی ثبت نشده است.'
+    })
+    res.json({
+      success: true,
+      carNames,
+      message: 'لیست کامل خودروها'
+    })
+  } catch (error) {
+    res.status(400).send({
+      error: `An error has occured ${error}`
+    })
+  }
+},
+
+///////////////show carBrand by filter
+async showCarBrand(req, res) {
+  try {
+    const filterByManufactuier = await CarBrand.find({manufactuierId:req.body.manufactuierId}).populate('manufactuierId');
+    if (!filterByManufactuier||filterByManufactuier.length===0) return res.json({
+      success: false,
+      message: 'برند خودرو مورد نظر پیدا نشد .'
+    })
+    await res.json({
+      success: true,
+      filterByManufactuier,
+      message: 'لیست خودرو بر اساس کارخانه سازنده'
+    })
+  } catch (error) {
+    res.status(400).send({
+      error: `An error has occured ${error}`
+    })
+  }
+},
+///////////////show carName by filter carBrand
+async showCarName(req, res) {
+  try {
+    const filterByCarBrand = await CarName.find({carBrandId:req.body.carBrandId});
+    if (!filterByCarBrand||filterByCarBrand.length===0) return res.json({
+      success: false,
+      message: 'خودرو مورد نظر پیدا نشد.'
+    })
+    await res.json({
+      success: true,
+      filterByCarBrand,
+      message: 'لیست خودروها براساس برند سازنده.'
+    })
+  } catch (error) {
+    res.status(400).send({
+      error: `An error has occured ${error}`
+    })
+  }
+},
 
 }
