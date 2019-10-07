@@ -74,6 +74,10 @@ const UserSchema = new Schema({
     expert: {
         type : String ,
         trim : true
+    },
+    cash :{
+        type : String ,
+        trim : true 
     }
 
   
