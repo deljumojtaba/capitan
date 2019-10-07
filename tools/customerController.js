@@ -223,12 +223,12 @@ module.exports = {
   },
 // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////// rest password ///////////////////////////////////////////////////
-async restPassword (req, res){
+async resetPassword (req, res){
   console.log(req.user);
   
   try {
     
-    bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.genSalt(10, function (err, salt) { // generate salt 
       if (err) {
           return (err); 
       }
@@ -236,13 +236,13 @@ async restPassword (req, res){
           if (err) {
               return (err);
           }
-          await User.findOneAndUpdate({_id:req.user._id},{ // find user and change password
+          await User.findOneAndUpdate({_id:req.user._id},{ // find user and rest password
             $set : { // set new password
               password : hash
             }
         
           },
-          res.json({ // result true after change
+          res.json({ // result true after rest password
             success: true,
             msg: 'پسورد با موفقیت ریست شد'
           }))
