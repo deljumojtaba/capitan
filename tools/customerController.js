@@ -222,6 +222,43 @@ module.exports = {
     }
   },
 // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////// rest password ///////////////////////////////////////////////////
+async restPassword (req, res){
+  console.log(req.user);
+  
+  try {
+    
+    bcrypt.genSalt(10, function (err, salt) {
+      if (err) {
+          return (err); 
+      }
+      bcrypt.hash(req.user.mobile, salt,async function (err, hash) { // hash new password
+          if (err) {
+              return (err);
+          }
+          await User.findOneAndUpdate({_id:req.user._id},{ // find user and change password
+            $set : { // set new password
+              password : hash
+            }
+        
+          },
+          res.json({ // result true after change
+            success: true,
+            msg: 'پسورد با موفقیت ریست شد'
+          }))
+      });
+  });
+
+  } catch (error) {
+    res.status(400).send({
+      error: `An error has occured ${error}`
+    })
+  }
+
+},
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   async sendSos(req, res) {
     try {
 
@@ -397,4 +434,5 @@ async getAllCredits(req ,res){
     })
   }
 }
+
 }

@@ -155,6 +155,13 @@ router.post('/showcarname', passport.authenticate('jwt', {
 
   });
 
+//////////////////////////////////////////////////////////////////////////////////////////
+/************************************* rest Password ************************************/
+//////////////////////////////////////////////////////////////////////////////////////////
 
+router.get('/restpassword',passport.authenticate('jwt', 
+  { session:false}),mid.test,async (req , res) => {
+      customerController.restPassword (req , res) 
+})
 
 module.exports = router;
