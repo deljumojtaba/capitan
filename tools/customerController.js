@@ -227,7 +227,6 @@ async resetPassword (req, res){
   console.log(req.user);
   
   try {
-    
     bcrypt.genSalt(10, function (err, salt) { // generate salt 
       if (err) {
           return (err); 
