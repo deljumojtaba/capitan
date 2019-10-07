@@ -23,7 +23,9 @@ const captainPlusRouter = require('./routes/captainplus')
 
 
 const app = express();
-mongoose.connect(config.database, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
+mongoose.connect(config.database ,  {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false });
+
+
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
