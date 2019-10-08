@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const bcrypt = require('bcryptjs');
 const validator = require('validator')
+const bcrypt = require('bcryptjs');
+
+
 
 const UserSchema = new Schema({
     firstName : {
@@ -86,13 +88,13 @@ const UserSchema = new Schema({
   });
 
 UserSchema.pre('save', function (next) {
-    let user = this;
+    var user = this;
     if (this.isModified('password') || this.isNew) {
         bcrypt.genSalt(10, function (err, salt) {
             if (err) {
                 return next(err);
             }
-            bcrypt.hash(user.password, salt, function (err, hash) {
+            bcrypt.hash(user.password, salt, null, function (err, hash) {
                 if (err) {
                     return next(err);
                 }
@@ -100,6 +102,8 @@ UserSchema.pre('save', function (next) {
                 next();
             });
         });
+    } else {
+        return next();
     }
 });
 
@@ -108,7 +112,7 @@ UserSchema.methods.comparePassword = function (passw, cb) {
         if (err) {
             return cb(err);
         }
-        cb(null, isMatch);        
+        cb(null, isMatch);
     });
 };
 

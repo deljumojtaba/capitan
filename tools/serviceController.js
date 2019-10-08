@@ -3,7 +3,7 @@ const passport = require('passport');
 const config = require('../config/database');
 require('../config/passport')(passport);
 const express = require('express');
-const User = require ('../models/user')
+const User = require('../models/user')
 const smsServise = require('./sendMsg')
 const Service = require('../models/service')
 const Part = require('../models/part')
@@ -211,25 +211,25 @@ module.exports = {
 
             }).save()
             //////////////////// send message to captainplus
-        const captainPlus = await User.findOne({ role: 'captainplus' })
-        let mobileNumber = captainPlus.mobile
-        let msg = `یک درخواست جدید به شماره ${req.body.problemId} ثبت شده است جهت مشاهده به پنل خودتان مراجعه کنید`
-        api.Send({
-            message: msg,
-            sender: "0013658000175",
-            receptor: mobileNumber
-        },
-            function (response, status) {
-                console.log(response);
-                console.log(status);
-                res.json({
-                    status,
-                    success: true,
-                    msg: 'درخواست خدمات با موفقیت ثبت شد .',
-                    response,
-                    newProblem
-                })
-            });
+            const captainPlus = await User.findOne({ role: 'captainplus' })
+            let mobileNumber = captainPlus.mobile
+            let msg = `یک درخواست جدید به شماره ${req.body.problemId} ثبت شده است جهت مشاهده به پنل خودتان مراجعه کنید`
+            api.Send({
+                message: msg,
+                sender: "10008445",
+                receptor: mobileNumber
+            },
+                function (response, status) {
+                    console.log(response);
+                    console.log(status);
+                    res.json({
+                        status,
+                        success: true,
+                        msg: 'درخواست خدمات با موفقیت ثبت شد .',
+                        response,
+                        newProblem
+                    })
+                });
             // res.json({
             //     success: true,
             //     newProblem,
@@ -241,7 +241,7 @@ module.exports = {
                 error: `An error has occured ${error}`
             })
         }
-        
+
 
 
 
@@ -275,5 +275,45 @@ module.exports = {
                 error: `An error has occured ${error}`
             })
         }
+    },
+    //////////////////// finished problem
+    async finishedProblem(req, res) {
+        try {
+                const filter = {
+                    problemId: req.body.problemId
+                };
+                const update = {
+                    problemId: req.body.problemId,
+                    userPhone: req.body.userPhone,
+                    address: req.body.address,
+                    carType: req.body.carType,
+                    problem: req.body.problem,
+                    numberPlates: req.body.numberPlates,
+                    dateOfProblem: req.body.dateOfProblem,
+                    timeOfProblem: req.body.timeOfProblem,
+                    condition: 'finished',
+                    cMobile: req.body.cMobile,
+                    cName: req.body.cName,
+                    timeOfSend: req.body.timeOfSend,
+                    dateOfSend: req.body.dateOfSend
+                };
+                let newProblem = await SosProblem.findOneAndUpdate(filter, update)
+                if (!newProblem) return res.json({
+                    success: false,
+                    message: 'درخواستی پیدا نشد'
+                })
+                await newProblem.save();
+                newProblem = await SosProblem.findOne(filter)
+                await res.json({
+                    success: true,
+                    newProblem,
+                    message: 'درخواست با موفقیت پایان یافت'
+                })
+            } catch (error) {
+                res.status(400).send({
+                    error: `An error has occured ${error}`
+                })
+            }
+        
     }
 }

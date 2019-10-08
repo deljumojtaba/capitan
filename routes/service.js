@@ -120,7 +120,7 @@ router.get('/getallproblems', passport.authenticate('jwt', {
 }),mid.test, (req, res) => {
 
     const reqUser = req.user
-    if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
+    if (reqUser.role === 'admin' || reqUser.role === 'superAdmin'|| reqUser.role === 'captainplus') {
         serviceController.getAllProblems (req, res)
     } else {
         return res.status(403).send({
@@ -136,13 +136,27 @@ router.post('/conditionproblem', passport.authenticate('jwt', {
 }),mid.test, (req, res) => {
 
     const reqUser = req.user
-    if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
-        serviceController.getConditionProblem (req, res)
+    if (reqUser.role === 'admin' || reqUser.role === 'superAdmin' || reqUser.role === 'captainplus') {
+        serviceController.finishedProblem (req, res)
     } else {
         return res.status(403).send({
             error: `access denied`
         })
     }
+})
+    /////////////////////// finished problem
+    router.put('/finishproblem', passport.authenticate('jwt', {
+        session: false
+    }),mid.test, (req, res) => {
+    
+        const reqUser = req.user
+        if (reqUser.role === 'admin' || reqUser.role === 'superAdmin'|| reqUser.role === 'captainplus') {
+            serviceController.finishedProblem (req, res)
+        } else {
+            return res.status(403).send({
+                error: `access denied`
+            })
+        }
     
 });
 
