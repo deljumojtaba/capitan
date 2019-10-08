@@ -114,5 +114,38 @@ router.post('/addproblem', passport.authenticate('jwt', {
     
 });
 
+////////////////////////// show all problems 
+router.get('/getallproblems', passport.authenticate('jwt', {
+    session: false
+}),mid.test, (req, res) => {
+
+    const reqUser = req.user
+    if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
+        serviceController.getAllProblems (req, res)
+    } else {
+        return res.status(403).send({
+            error: `access denied`
+        })
+    }
+    
+});
+
+////////////////////////// show condition problems 
+router.post('/conditionproblem', passport.authenticate('jwt', {
+    session: false
+}),mid.test, (req, res) => {
+
+    const reqUser = req.user
+    if (reqUser.role === 'admin' || reqUser.role === 'superAdmin') {
+        serviceController.getConditionProblem (req, res)
+    } else {
+        return res.status(403).send({
+            error: `access denied`
+        })
+    }
+    
+});
+
+
 
 module.exports = router;

@@ -52,11 +52,7 @@ router.get('/customercars' , passport.authenticate('jwt', { session: false }),mi
 ////////////////////////////
 router.delete('/deletecustomercar', passport.authenticate('jwt', { session:false}),mid.test, (req , res) => {
    customerController.deleteCar (req , res) })
-////////////////////////////
-////chang password
-////////////////////////////
-router.put('/changpassword',passport.authenticate('jwt', { session:false}),mid.test, (req , res) => {
-    customerController.changPassword (req , res) })
+
 
 //////////////////////////
 ////request sos
@@ -159,6 +155,13 @@ router.post('/showcarname', passport.authenticate('jwt', {
 
   });
 
+//////////////////////////////////////////////////////////////////////////////////////////
+/************************************* rest Password ************************************/
+//////////////////////////////////////////////////////////////////////////////////////////
 
+router.get('/resetpassword',passport.authenticate('jwt', 
+  { session:false}),mid.test,async (req , res) => {
+      customerController.resetPassword (req , res) 
+})
 
 module.exports = router;

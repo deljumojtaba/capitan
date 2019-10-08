@@ -185,9 +185,29 @@ module.exports = {
       })
 
     }
+  },
+
+///////////////////////////////////////////////////////////////////////////
+async getAllUsersFromOneCity(req, res) {
+  try {
+    const showUsersOneCity = await User.find({city:req.body.city,role:"customer"})
+    if (!showUsersOneCity || showUsersOneCity.length===0) return res.json({ // erorr handel
+      success: false,
+      msg: 'شهر موردنظر انتخاب نشده است.'
+    });
+    res.json({ // send response success
+      success: true,
+      showUsersOneCity,
+      msg: ` لیست تمام کاربران شهر انتخاب شده.`
+    });
+
+  } catch (error) { 
+    res.status(500).send({
+      error: `An error has occured ${error}`
+    })
+
   }
-
-
+}
 
 
 

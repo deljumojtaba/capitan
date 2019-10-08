@@ -274,10 +274,22 @@ router.put('/unblocking', passport.authenticate('jwt', {
 
 });
 
-////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+/********************************show user filter by city********************************/
+//////////////////////////////////////////////////////////////////////////////////////////
 
-
-
+router.post('/showusersfromonecity',passport.authenticate('jwt',{
+  session: false
+}),mid.test, (req, res) => {
+  const reqUser = req.user
+  if (reqUser.role !== 'superAdmin' && reqUser.role !== 'admin') {
+    return res.status(403).send({
+      error: `access denied`
+    })
+  } else {
+    adminController.getAllUsersFromOneCity(req, res)
+  }
+});
 
 
 

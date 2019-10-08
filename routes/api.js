@@ -6,8 +6,10 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var router = express.Router();
 var User = require("../models/user");
-const smsServise = require('../tools/sendMsg')
-const mid = require('../tools/mid')
+const smsServise = require('../tools/sendMsg');
+const mid = require('../tools/mid');
+const customerController = require('../tools/customerController');
+const bcrypt = require('bcryptjs');
 
 /////// send Messeage
 
@@ -167,6 +169,16 @@ getToken = function (headers) {
     return null;
   }
 };
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/************************************ Change Password ***********************************/
+//////////////////////////////////////////////////////////////////////////////////////////
+
+router.post('/changepassword',passport.authenticate('jwt', 
+  { session:false}),mid.test,async (req , res) => {
+      customerController.changPassword (req , res) 
+})
+
 
 
 module.exports = router;

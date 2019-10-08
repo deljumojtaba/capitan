@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user')
 const Car = require('../models/car')
 const shortid = require('shortid');
+const bcrypt = require('bcryptjs');
 const Sos = require ('../models/sos')
 const Kavenegar = require('kavenegar');
 const api = Kavenegar.KavenegarApi({
@@ -174,34 +175,89 @@ module.exports = {
       })
     }
   },
-  /////////////////////////chang password
-  // async changPassword (req , res) {
-  //   try {
-  //      const user = await User.findById(req.user._id)
-  //      if(!user) {
-  //      return res.json({
-  //       success: false,
-  //       message: 'User not fuond'
-  //     })
-  //   } else {
-  //     // check if password matches
-  //     user.comparePassword(req.body.oldPassword, function (err, isMatch) {
-  //       if (isMatch && !err) {
-  //         user.password = req.body.newPassword 
-  //         return res.json({
-  //           success: true,
-  //           message: 'User password change'
-  //         })
-  //       }
-  //     })
-  //   }
+/////////////////////////////////////////////////// change password ///////////////////////////////////////////////////
+  async changPassword (req , res) { 
+  try {
+        const user = await User.findOne(req.user._id) // find request user in database
+    if(!user) {
+        return res.json({ // returen false if not found user
+        success: false,
+        message: 'User not fuond' 
+      })
+    } else {
+        bcrypt.compare(req.body.oldpassword, user.password, (err, isMatch) => { // compare oldPassword  
+          if (isMatch && !err) { // ismatch callback compare 
+                  bcrypt.genSalt(10, function (err, salt) {
+                      if (err) {
+                          return next(err); 
+                      }
+                      bcrypt.hash(req.body.newpassword, salt,async function (err, hash) { // hash new password
+                          if (err) {
+                              return next(err);
+                          }
+                          await User.findOneAndUpdate({_id:req.user._id},{ // find user and change password
+                            $set : { // set new password
+                              password : hash
+                            }
+                        
+                          },
+                          res.json({ // result true after change
+                            success: true,
+                            msg: 'پسورد با موفقیت تغییر کرد.'
+                          }))
+                      });
+                  });
+            }else{
+              return res.json({ // result false after compaer and not match old password in db and old password insert user
+                success: false,
+                message: 'پسورد قدیمی اشتباه وارد شده است'
+              })
+            }
+        });
+      }
+    } catch (error) {
+      res.status(400).send({
+        error: `An error has occured ${error}`
+      })
+    }
+  },
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////// rest password ///////////////////////////////////////////////////
+async resetPassword (req, res){
+  console.log(req.user);
+  
+  try {
+    bcrypt.genSalt(10, function (err, salt) { // generate salt 
+      if (err) {
+          return (err); 
+      }
+      bcrypt.hash(req.user.mobile, salt,async function (err, hash) { // hash new password
+          if (err) {
+              return (err);
+          }
+          await User.findOneAndUpdate({_id:req.user._id},{ // find user and rest password
+            $set : { // set new password
+              password : hash
+            }
+        
+          },
+          res.json({ // result true after rest password
+            success: true,
+            msg: 'پسورد با موفقیت ریست شد'
+          }))
+      });
+  });
 
-  //   } catch (error) {
-  //     res.status(400).send({
-  //       error: `An error has occured ${error}`
-  //     })
-  //   }
-  // }
+  } catch (error) {
+    res.status(400).send({
+      error: `An error has occured ${error}`
+    })
+  }
+
+},
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   async sendSos(req, res) {
     try {
 
@@ -377,4 +433,5 @@ async getAllCredits(req ,res){
     })
   }
 }
+
 }
