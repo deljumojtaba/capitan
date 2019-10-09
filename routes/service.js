@@ -137,7 +137,7 @@ router.post('/conditionproblem', passport.authenticate('jwt', {
 
     const reqUser = req.user
     if (reqUser.role === 'admin' || reqUser.role === 'superAdmin' || reqUser.role === 'captainplus') {
-        serviceController.finishedProblem (req, res)
+        serviceController.getConditionProblem (req, res)
     } else {
         return res.status(403).send({
             error: `access denied`
