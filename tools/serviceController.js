@@ -250,11 +250,13 @@ module.exports = {
     //////////////////// get all problems
     async getAllProblems(req, res) {
         try {
-            const AllProblems = await SosProblem.find({})
+            let page = req.body.page
+            const count = await SosProblem.count({})
+            const AllProblems = await SosProblem.find({}).sort({created: -1}).skip((page - 1) * 20)
             if (!AllProblems || AllProblems.length === 0) {
                 return res.json({ success: false, msg: 'درخواستی وجود ندارد  ' })
             }
-            res.json({ success: true, AllProblems, msg: ' لیست کل درخواست ها ' })
+            res.json({ success: true, AllProblems, count ,msg: ' لیست کل درخواست ها ' })
         } catch (error) {
             res.status(400).send({
                 error: `An error has occured ${error}`
@@ -265,11 +267,13 @@ module.exports = {
     async getConditionProblem(req, res) {
         try {
             let reqCondition = req.body.condition
-            const conditionProblem = await SosProblem.find({ condition: reqCondition })
+            let page = req.body.page
+            const count = await SosProblem.count({condition: reqCondition})
+            const conditionProblem = await SosProblem.find({ condition: reqCondition }).sort({created: -1}).skip((page - 1) * 20)
             if (!conditionProblem || conditionProblem.length === 0) {
                 return res.json({ success: false, msg: 'درخواستی وجود ندارد  ' })
             }
-            res.json({ success: true, conditionProblem, msg: ' لیست کل درخواست ها ' })
+            res.json({ success: true, conditionProblem,count, msg: ' لیست کل درخواست ها ' })
         } catch (error) {
             res.status(400).send({
                 error: `An error has occured ${error}`

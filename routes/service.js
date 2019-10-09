@@ -115,7 +115,7 @@ router.post('/addproblem', passport.authenticate('jwt', {
 });
 
 ////////////////////////// show all problems 
-router.get('/getallproblems', passport.authenticate('jwt', {
+router.post('/getallproblems', passport.authenticate('jwt', {
     session: false
 }),mid.test, (req, res) => {
 
