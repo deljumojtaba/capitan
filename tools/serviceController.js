@@ -251,19 +251,19 @@ module.exports = {
     async getAllProblems(req, res) {
         try {
             let page = req.body.page
-            let AllProblems 
+            let AllProblems
             const count = await SosProblem.count({})
-            if (page === 1) {
-             AllProblems = await SosProblem.find({}).sort({created: -1}).limit(20)
+            if (page === 1 || page ==='1') {
+                AllProblems = await SosProblem.find({}).sort({ created: -1 }).limit(20)
             }
             else {
-             AllProblems = await SosProblem.find({}).sort({created: -1}).skip((page - 1) * 20)
+                AllProblems = await SosProblem.find({}).sort({ created: -1 }).skip((page - 1) * 20)
 
             }
             if (!AllProblems || AllProblems.length === 0) {
                 return res.json({ success: false, msg: 'درخواستی وجود ندارد  ' })
             }
-            res.json({ success: true, AllProblems, count ,msg: ' لیست کل درخواست ها ' })
+            res.json({ success: true, AllProblems, count, msg: ' لیست کل درخواست ها ' })
         } catch (error) {
             res.status(400).send({
                 error: `An error has occured ${error}`
@@ -275,12 +275,19 @@ module.exports = {
         try {
             let reqCondition = req.body.condition
             let page = req.body.page
+            let conditionProblem
             const count = await SosProblem.count({condition: reqCondition})
-            const conditionProblem = await SosProblem.find({ condition: reqCondition }).sort({created: -1}).skip((page - 1) * 20)
+            if (page === 1 || page ==='1') {
+                console.log(20)
+                conditionProblem = await SosProblem.find({ condition: reqCondition }).limit(20)
+            }
+            else {
+                conditionProblem = await SosProblem.find({ condition: reqCondition }).sort({ created: -1 }).skip((page - 1) * 20)
+            }
             if (!conditionProblem || conditionProblem.length === 0) {
                 return res.json({ success: false, msg: 'درخواستی وجود ندارد  ' })
             }
-            res.json({ success: true, conditionProblem,count, msg: ' لیست کل درخواست ها ' })
+            res.json({ success: true, conditionProblem, count, msg: ' لیست کل درخواست ها ' })
         } catch (error) {
             res.status(400).send({
                 error: `An error has occured ${error}`
@@ -290,41 +297,41 @@ module.exports = {
     //////////////////// finished problem
     async finishedProblem(req, res) {
         try {
-                const filter = {
-                    problemId: req.body.problemId
-                };
-                const update = {
-                    problemId: req.body.problemId,
-                    userPhone: req.body.userPhone,
-                    address: req.body.address,
-                    carType: req.body.carType,
-                    problem: req.body.problem,
-                    numberPlates: req.body.numberPlates,
-                    dateOfProblem: req.body.dateOfProblem,
-                    timeOfProblem: req.body.timeOfProblem,
-                    condition: 'finished',
-                    cMobile: req.body.cMobile,
-                    cName: req.body.cName,
-                    timeOfSend: req.body.timeOfSend,
-                    dateOfSend: req.body.dateOfSend
-                };
-                let newProblem = await SosProblem.findOneAndUpdate(filter, update)
-                if (!newProblem) return res.json({
-                    success: false,
-                    message: 'درخواستی پیدا نشد'
-                })
-                await newProblem.save();
-                newProblem = await SosProblem.findOne(filter)
-                await res.json({
-                    success: true,
-                    newProblem,
-                    message: 'درخواست با موفقیت پایان یافت'
-                })
-            } catch (error) {
-                res.status(400).send({
-                    error: `An error has occured ${error}`
-                })
-            }
-        
+            const filter = {
+                problemId: req.body.problemId
+            };
+            const update = {
+                problemId: req.body.problemId,
+                userPhone: req.body.userPhone,
+                address: req.body.address,
+                carType: req.body.carType,
+                problem: req.body.problem,
+                numberPlates: req.body.numberPlates,
+                dateOfProblem: req.body.dateOfProblem,
+                timeOfProblem: req.body.timeOfProblem,
+                condition: 'finished',
+                cMobile: req.body.cMobile,
+                cName: req.body.cName,
+                timeOfSend: req.body.timeOfSend,
+                dateOfSend: req.body.dateOfSend
+            };
+            let newProblem = await SosProblem.findOneAndUpdate(filter, update)
+            if (!newProblem) return res.json({
+                success: false,
+                message: 'درخواستی پیدا نشد'
+            })
+            await newProblem.save();
+            newProblem = await SosProblem.findOne(filter)
+            await res.json({
+                success: true,
+                newProblem,
+                message: 'درخواست با موفقیت پایان یافت'
+            })
+        } catch (error) {
+            res.status(400).send({
+                error: `An error has occured ${error}`
+            })
+        }
+
     }
 }
