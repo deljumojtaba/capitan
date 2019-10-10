@@ -190,17 +190,10 @@ module.exports = {
     //////////////// add problem
     async addProblem(req, res) {
         try {
-            const existProblem = await SosProblem.findOne({
-                problemId: req.body.problemId
-            })
-            if (existProblem) {
-                return res.json({
-                    success: false,
-                    msg: 'شماره خدمات مورد نظر قبلا وجود داشته است .'
-                });
-            }
+            var count = await SosProblem.count({})
+            var problemNum = count++         
             const newProblem = await new SosProblem({
-                problemId: req.body.problemId,
+                problemId: problemNum,
                 userPhone: req.body.userPhone,
                 address: req.body.address,
                 carType: req.body.carType,
@@ -213,7 +206,7 @@ module.exports = {
             //////////////////// send message to captainplus
             const captainPlus = await User.findOne({ role: 'captainplus' })
             let mobileNumber = captainPlus.mobile
-            let msg = `درخواست جدید به شماره ${req.body.problemId}  جهت مشاهده به پنل خودتان مراجعه کنید`
+            let msg = `درخواست جدید به شماره ${problemNum}  جهت مشاهده به پنل خودتان مراجعه کنید`
             api.Send({
                 message: msg,
                 sender: "10008445",
