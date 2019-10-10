@@ -213,7 +213,7 @@ module.exports = {
             //////////////////// send message to captainplus
             const captainPlus = await User.findOne({ role: 'captainplus' })
             let mobileNumber = captainPlus.mobile
-            let msg = `یک درخواست جدید به شماره ${req.body.problemId} ثبت شده است جهت مشاهده به پنل خودتان مراجعه کنید`
+            let msg = `درخواست جدید به شماره ${req.body.problemId}  جهت مشاهده به پنل خودتان مراجعه کنید`
             api.Send({
                 message: msg,
                 sender: "10008445",
@@ -251,8 +251,15 @@ module.exports = {
     async getAllProblems(req, res) {
         try {
             let page = req.body.page
+            let AllProblems 
             const count = await SosProblem.count({})
-            const AllProblems = await SosProblem.find({}).sort({created: -1}).skip((page - 1) * 20)
+            if (page === 1) {
+             AllProblems = await SosProblem.find({}).sort({created: -1}).limit(20)
+            }
+            else {
+             AllProblems = await SosProblem.find({}).sort({created: -1}).skip((page - 1) * 20)
+
+            }
             if (!AllProblems || AllProblems.length === 0) {
                 return res.json({ success: false, msg: 'درخواستی وجود ندارد  ' })
             }
